@@ -1,0 +1,138 @@
+name: "global-trade-network"
+
+x-type: "hlfv1"
+x-loggingLevel: info
+
+description: "The network to be in if you want to stay in the global trade business"
+
+version: 1.0.0
+
+client:
+
+  organization: ec25aea77f64d2137c8af50af3aecd66619040ed
+
+  logging:
+    level: info
+
+  peer:
+    timeout:
+      connection: 10s
+      queryResponse: 45s
+      executeTxResponse: 120s
+  eventService:
+    timeout:
+      connection: 10s
+      registrationResponse: 50s
+  orderer:
+    timeout:
+      connection: 10s
+      response: 45s
+
+  cryptoconfig:
+    path: /opt/gopath/src/github.com/hyperledger/fabric
+
+  credentialStore:
+    path: "/tmp/hfc-kvs"
+
+    cryptoStore:
+      path: /tmp/msp
+
+    wallet: wallet-name
+
+  BCCSP:
+    security:
+     enabled: true
+     default:
+      provider: "SW"
+     hashAlgorithm: "SHA2"
+     softVerify: true
+     ephemeral: false
+     level: 256
+
+channels:
+  
+  channeldemo:
+    orderers:
+      
+      - orderer-92bbcce0b6ede3f02433aa5958d97ece26038520-0.orderer-92bbcce0b6ede3f02433aa5958d97ece26038520.default.svc.cluster.local
+      
+    peers:
+      
+      peer-ec25aea77f64d2137c8af50af3aecd66619040ed-0.peer-ec25aea77f64d2137c8af50af3aecd66619040ed.default.svc.cluster.local:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      
+    chaincodes:
+      - chaincode:2.1
+  
+organizations:
+  
+  ec25aea77f64d2137c8af50af3aecd66619040ed:
+    mspid: ec25aea77f64d2137c8af50af3aecd66619040edMSP
+
+    cryptoPath:  D:/PRECIOUS/IT/chaincode/huawei/day19/JavaSDKDemo-master/JavaSDKDemo-master/config/ec25aea77f64d2137c8af50af3aecd66619040ed.peer/msp
+    tlsCryptoKeyPath: D:/PRECIOUS/IT/chaincode/huawei/day19/JavaSDKDemo-master/JavaSDKDemo-master/config/ec25aea77f64d2137c8af50af3aecd66619040ed.peer/tls/server.key
+    tlsCryptoCertPath: D:/PRECIOUS/IT/chaincode/huawei/day19/JavaSDKDemo-master/JavaSDKDemo-master/config/ec25aea77f64d2137c8af50af3aecd66619040ed.peer/tls/server.crt
+
+    peers:
+      
+      - peer-ec25aea77f64d2137c8af50af3aecd66619040ed-0.peer-ec25aea77f64d2137c8af50af3aecd66619040ed.default.svc.cluster.local
+      
+    certificateAuthorities:
+      - ca-org1
+  
+  ordererorg:
+      mspID: "92bbcce0b6ede3f02433aa5958d97ece26038520MSP"
+
+      cryptoPath: D:/PRECIOUS/IT/chaincode/huawei/day19/JavaSDKDemo-master/JavaSDKDemo-master/config/92bbcce0b6ede3f02433aa5958d97ece26038520.orderer/msp
+orderer-eip: 49.4.8.225
+orderers:
+  
+  orderer-92bbcce0b6ede3f02433aa5958d97ece26038520-0.orderer-92bbcce0b6ede3f02433aa5958d97ece26038520.default.svc.cluster.local:
+    url: grpcs://49.4.8.225:30805
+
+    grpcOptions:
+      ssl-target-name-override: orderer-92bbcce0b6ede3f02433aa5958d97ece26038520-0.orderer-92bbcce0b6ede3f02433aa5958d97ece26038520.default.svc.cluster.local
+      grpc-max-send-message-length: 15
+      sslProvider: openSSL
+      negotiationType: TLS
+      hostnameOverride: orderer-92bbcce0b6ede3f02433aa5958d97ece26038520-0.orderer-92bbcce0b6ede3f02433aa5958d97ece26038520.default.svc.cluster.local
+
+    tlsCACerts:
+      path: D:/PRECIOUS/IT/chaincode/huawei/day19/JavaSDKDemo-master/JavaSDKDemo-master/config/92bbcce0b6ede3f02433aa5958d97ece26038520.orderer/msp/tlscacerts/tlsca.92bbcce0b6ede3f02433aa5958d97ece26038520-cert.pem
+  
+peer-eip: 49.4.8.225
+peers:
+  
+  peer-ec25aea77f64d2137c8af50af3aecd66619040ed-0.peer-ec25aea77f64d2137c8af50af3aecd66619040ed.default.svc.cluster.local:
+    url: grpcs://49.4.8.225:30605
+
+    eventUrl: grpcs://49.4.8.225:30705
+
+    grpcOptions:
+      ssl-target-name-override: peer-ec25aea77f64d2137c8af50af3aecd66619040ed-0.peer-ec25aea77f64d2137c8af50af3aecd66619040ed.default.svc.cluster.local
+      grpc.http2.keepalive_time: 15
+      sslProvider: openSSL
+      negotiationType: TLS
+      hostnameOverride: peer-ec25aea77f64d2137c8af50af3aecd66619040ed-0.peer-ec25aea77f64d2137c8af50af3aecd66619040ed.default.svc.cluster.local
+
+    tlsCACerts:
+      path: D:/PRECIOUS/IT/chaincode/huawei/day19/JavaSDKDemo-master/JavaSDKDemo-master/config/ec25aea77f64d2137c8af50af3aecd66619040ed.peer/msp/tlscacerts/tlsca.ec25aea77f64d2137c8af50af3aecd66619040ed-cert.pem
+  
+certificateAuthorities:
+  ca-org1:
+    url: https://ca_peerOrg1:7054
+    httpOptions:
+      verify: true
+    tlsCACerts:
+      path: $GOPATH/src/github.com/hyperledger/fabric-sdk-go/test/api-server/tls/fabricca/certs/ca_root.pem
+      client:
+       keyfile: $GOPATH/src/github.com/hyperledger/fabric-sdk-go/test/api-server/tls/fabricca/certs/client/client_fabric_client-key.pem
+       certfile: $GOPATH/src/github.com/hyperledger/fabric-sdk-go/test/api-server/tls/fabricca/certs/client/client_fabric_client.pem
+
+    registrar:
+      enrollId: admin
+      enrollSecret: adminpw
+    caName: ca-org1
